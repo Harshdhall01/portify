@@ -1,0 +1,201 @@
+﻿import { useEffect, useState } from 'react'
+import { useNavigate, Link } from 'react-router-dom'
+import Navbar from '../components/Navbar'
+
+export default function Dashboard() {
+  const navigate = useNavigate()
+  const [portfolios, setPortfolios] = useState([])
+  const [user, setUser] = useState(null)
+
+  useEffect(() => {
+    // Load saved data from localStorage for now
+    const data = localStorage.getItem('portify_data')
+    const tpl  = localStorage.getItem('portify_template')
+    if (data) {
+      const parsed = JSON.parse(data)
+      setUser(parsed.personal)
+      setPortfolios([
+        {
+          id: 1,
+          name: parsed.personal?.name || 'My Portfolio',
+          template: tpl || '1',
+          updatedAt: new Date().toLocaleDateString(),
+          status: 'draft',
+        }
+      ])
+    }
+  }, [])
+
+  const stats = [
+    { label: 'Portfolios', value: portfolios.length, icon: 'ðŸ—‚ï¸' },
+    { label: 'Templates',  value: '24',              icon: 'ðŸŽ¨' },
+    { label: 'Deployed',   value: '0',               icon: 'ðŸš€' },
+  ]
+
+  return (
+    <div className="min-h-screen relative" style={{ background: '#010b18' }}>
+      <Navbar />
+
+      {/* bg glow */}
+      <div className="fixed inset-0 pointer-events-none" style={{ zIndex: 0 }}>
+        <div className="absolute top-1/3 left-1/2 -translate-x-1/2
+                        w-[600px] h-[600px] rounded-full"
+             style={{
+               background: 'radial-gradient(circle, rgba(14,110,184,0.05) 0%, transparent 70%)',
+             }} />
+      </div>
+
+      <div className="relative max-w-6xl mx-auto px-6 pt-32 pb-20" style={{ zIndex: 10 }}>
+
+        {/* Header */}
+        <div className="flex items-center justify-between mb-12 flex-wrap gap-4">
+          <div>
+            <span className="font-mono text-xs text-biolum-DEFAULT tracking-widest
+                             uppercase mb-2 block">
+              Welcome back
+            </span>
+            <h1 className="font-display font-bold text-foam-white"
+                style={{ fontSize: 'clamp(1.8rem, 4vw, 2.8rem)' }}>
+              {user?.name ? `Hey, ${user.name.split(' ')[0]} ðŸ‘‹` : 'Your Dashboard'}
+            </h1>
+          </div>
+          <button
+            onClick={() => navigate('/builder')}
+            className="btn-ocean px-6 py-3 text-sm font-semibold flex items-center gap-2 group"
+          >
+            + New Portfolio
+            <svg className="w-4 h-4 group-hover:translate-x-1 transition-transform"
+                 fill="none" viewBox="0 0 24 24" stroke="currentColor">
+              <path strokeLinecap="round" strokeLinejoin="round"
+                    strokeWidth={2} d="M17 8l4 4m0 0l-4 4m4-4H3" />
+            </svg>
+          </button>
+        </div>
+
+        {/* Stats */}
+        <div className="grid grid-cols-3 gap-4 mb-12">
+          {stats.map((s) => (
+            <div key={s.label} className="glass rounded-2xl p-6 border border-ocean-700/40
+                                          flex flex-col items-center text-center">
+              <span className="text-2xl mb-2">{s.icon}</span>
+              <span className="font-display font-bold text-3xl text-foam-white mb-1">
+                {s.value}
+              </span>
+              <span className="font-mono text-xs text-ocean-400 tracking-widest uppercase">
+                {s.label}
+              </span>
+            </div>
+          ))}
+        </div>
+
+        {/* Portfolios */}
+        <div className="mb-6 flex items-center justify-between">
+          <h2 className="font-display font-bold text-xl text-foam-white">
+            My Portfolios
+          </h2>
+          <span className="font-mono text-xs text-ocean-400 tracking-widest uppercase">
+            {portfolios.length} total
+          </span>
+        </div>
+
+        {portfolios.length === 0 ? (
+          /* Empty state */
+          <div className="glass rounded-2xl p-16 border border-ocean-700/40
+                          flex flex-col items-center text-center">
+            <div className="w-16 h-16 rounded-full glass flex items-center justify-center
+                            text-3xl mb-4 border border-biolum-DEFAULT/20">
+              ðŸŒŠ
+            </div>
+            <h3 className="font-display font-bold text-xl text-foam-white mb-2">
+              No portfolios yet
+            </h3>
+            <p className="font-body text-sm text-ocean-400 mb-6 max-w-xs">
+              Create your first portfolio in under 5 minutes with AI
+            </p>
+            <button
+              onClick={() => navigate('/builder')}
+              className="btn-ocean px-6 py-3 text-sm font-semibold"
+            >
+              Build My Portfolio
+            </button>
+          </div>
+        ) : (
+          <div className="grid gap-4 md:grid-cols-2">
+            {portfolios.map((p) => (
+              <div key={p.id}
+                   className="glass rounded-2xl p-6 border border-ocean-700/40
+                              hover:border-biolum-DEFAULT/30 transition-all duration-300 group">
+                {/* Card header */}
+                <div className="flex items-start justify-between mb-4">
+                  <div>
+                    <h3 className="font-display font-bold text-lg text-foam-white mb-1">
+                      {p.name}
+                    </h3>
+                    <span className="font-mono text-xs text-ocean-400">
+                      Template #{p.template} Â· Updated {p.updatedAt}
+                    </span>
+                  </div>
+                  <span className={`font-mono text-xs px-3 py-1 rounded-full border
+                    ${p.status === 'live'
+                      ? 'text-green-400 border-green-400/30 bg-green-400/10'
+                      : 'text-ocean-400 border-ocean-600/40 bg-ocean-800/30'}`}>
+                    {p.status}
+                  </span>
+                </div>
+
+                {/* Preview thumbnail */}
+                <div className="w-full h-32 rounded-xl mb-4 flex items-center justify-center
+                                border border-ocean-700/30 overflow-hidden
+                                bg-gradient-to-br from-ocean-900 to-ocean-950">
+                  <span className="font-mono text-xs text-ocean-500 tracking-widest uppercase">
+                    Portfolio Preview
+                  </span>
+                </div>
+
+                {/* Actions */}
+                <div className="flex items-center gap-2 flex-wrap">
+                  <button
+                    onClick={() => navigate('/preview')}
+                    className="btn-ocean px-4 py-2 text-xs font-mono flex-1"
+                  >
+                    View
+                  </button>
+                  <button
+                    onClick={() => navigate('/builder')}
+                    className="btn-outline-ocean px-4 py-2 text-xs font-mono flex-1"
+                  >
+                    Edit
+                  </button>
+                  <button
+                    className="px-4 py-2 text-xs font-mono rounded-xl
+                               border border-ocean-700/40 text-ocean-400
+                               hover:border-biolum-DEFAULT/30 hover:text-biolum-DEFAULT
+                               transition-all duration-300"
+                  >
+                    ðŸš€ Deploy
+                  </button>
+                </div>
+              </div>
+            ))}
+          </div>
+        )}
+
+        {/* Bottom tip */}
+        <div className="mt-12 glass rounded-2xl p-6 border border-biolum-DEFAULT/10
+                        flex items-center gap-4">
+          <span className="text-2xl">ðŸ’¡</span>
+          <div>
+            <p className="font-body text-sm text-foam-white mb-1">
+              Backend coming soon
+            </p>
+            <p className="font-body text-xs text-ocean-400">
+              Your portfolios are saved locally right now. Once we connect the backend,
+              they'll sync to your account automatically.
+            </p>
+          </div>
+        </div>
+
+      </div>
+    </div>
+  )
+}

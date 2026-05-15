@@ -1,0 +1,196 @@
+@import url('https://fonts.googleapis.com/css2?family=Playfair+Display:wght@400;500;600;700;800;900&family=DM+Sans:wght@300;400;500;600;700&family=JetBrains+Mono:wght@400;500&display=swap');
+
+@tailwind base;
+@tailwind components;
+@tailwind utilities;
+
+/* ── Base ─────────────────────────────────────────── */
+* {
+  margin: 0;
+  padding: 0;
+  box-sizing: border-box;
+}
+
+html {
+  scroll-behavior: smooth;
+}
+
+body {
+  background-color: #010b18;
+  color: #e8f8ff;
+  font-family: 'DM Sans', sans-serif;
+  overflow-x: hidden;
+}
+
+/* ── Custom Cursor ────────────────────────────────── */
+.cursor {
+  width: 12px;
+  height: 12px;
+  background: #00ffe7;
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9999;
+  transition: transform 0.15s ease;
+  box-shadow: 0 0 10px #00ffe7, 0 0 20px #00ffe7;
+}
+
+.cursor-follower {
+  width: 36px;
+  height: 36px;
+  border: 1.5px solid rgba(0, 255, 231, 0.5);
+  border-radius: 50%;
+  position: fixed;
+  pointer-events: none;
+  z-index: 9998;
+  transition: transform 0.08s ease, width 0.2s, height 0.2s;
+}
+
+/* ── Scrollbar ────────────────────────────────────── */
+::-webkit-scrollbar {
+  width: 6px;
+}
+
+::-webkit-scrollbar-track {
+  background: #010b18;
+}
+
+::-webkit-scrollbar-thumb {
+  background: linear-gradient(180deg, #00ffe7, #0e6eb8);
+  border-radius: 10px;
+}
+
+/* ── Glass Card ───────────────────────────────────── */
+.glass {
+  background: rgba(3, 35, 64, 0.4);
+  backdrop-filter: blur(16px);
+  -webkit-backdrop-filter: blur(16px);
+  border: 1px solid rgba(0, 255, 231, 0.1);
+  border-radius: 16px;
+}
+
+.glass-dark {
+  background: rgba(1, 11, 24, 0.6);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(26, 143, 209, 0.15);
+  border-radius: 16px;
+}
+
+/* ── Bioluminescent Glow Text ─────────────────────── */
+.glow-text {
+  text-shadow:
+    0 0 10px rgba(0, 255, 231, 0.8),
+    0 0 30px rgba(0, 255, 231, 0.5),
+    0 0 60px rgba(0, 255, 231, 0.3);
+}
+
+.glow-text-blue {
+  text-shadow:
+    0 0 10px rgba(14, 110, 184, 0.9),
+    0 0 30px rgba(14, 110, 184, 0.6),
+    0 0 80px rgba(14, 110, 184, 0.3);
+}
+
+/* ── Shimmer Button ───────────────────────────────── */
+.btn-ocean {
+  background: linear-gradient(
+    135deg,
+    #0e6eb8 0%,
+    #00ffe7 50%,
+    #0e6eb8 100%
+  );
+  background-size: 200% auto;
+  animation: shimmer 2.5s linear infinite;
+  border: none;
+  border-radius: 50px;
+  color: #010b18;
+  font-weight: 700;
+  font-family: 'DM Sans', sans-serif;
+  letter-spacing: 0.05em;
+  transition: transform 0.2s ease, box-shadow 0.2s ease;
+}
+
+.btn-ocean:hover {
+  transform: translateY(-3px) scale(1.03);
+  box-shadow: 0 0 40px rgba(0, 255, 231, 0.5);
+}
+
+.btn-outline-ocean {
+  background: transparent;
+  border: 1.5px solid rgba(0, 255, 231, 0.5);
+  border-radius: 50px;
+  color: #00ffe7;
+  font-weight: 600;
+  font-family: 'DM Sans', sans-serif;
+  transition: all 0.3s ease;
+}
+
+.btn-outline-ocean:hover {
+  background: rgba(0, 255, 231, 0.1);
+  border-color: #00ffe7;
+  box-shadow: 0 0 25px rgba(0, 255, 231, 0.3);
+  transform: translateY(-2px);
+}
+
+/* ── Water Ripple ─────────────────────────────────── */
+.ripple {
+  position: absolute;
+  border-radius: 50%;
+  background: radial-gradient(
+    circle,
+    rgba(0, 255, 231, 0.15) 0%,
+    transparent 70%
+  );
+  animation: rippleOut 1.5s ease-out forwards;
+  pointer-events: none;
+}
+
+@keyframes rippleOut {
+  0% { transform: scale(0); opacity: 1; }
+  100% { transform: scale(4); opacity: 0; }
+}
+
+/* ── Section Divider Wave ─────────────────────────── */
+.wave-divider {
+  width: 100%;
+  overflow: hidden;
+  line-height: 0;
+}
+
+.wave-divider svg {
+  display: block;
+  width: 100%;
+}
+
+/* ── Depth Layers ─────────────────────────────────── */
+.depth-1 { z-index: 10; }
+.depth-2 { z-index: 20; }
+.depth-3 { z-index: 30; }
+.depth-4 { z-index: 40; }
+
+/* ── Selection Color ──────────────────────────────── */
+::selection {
+  background: rgba(0, 255, 231, 0.25);
+  color: #e8f8ff;
+}
+
+/* ── Input Ocean Style ────────────────────────────── */
+.input-ocean {
+  background: rgba(3, 35, 64, 0.5);
+  border: 1px solid rgba(0, 255, 231, 0.2);
+  border-radius: 10px;
+  color: #e8f8ff;
+  font-family: 'DM Sans', sans-serif;
+  transition: border-color 0.3s ease, box-shadow 0.3s ease;
+  outline: none;
+}
+
+.input-ocean:focus {
+  border-color: rgba(0, 255, 231, 0.6);
+  box-shadow: 0 0 20px rgba(0, 255, 231, 0.15);
+}
+
+.input-ocean::placeholder {
+  color: rgba(200, 230, 255, 0.35);
+}
