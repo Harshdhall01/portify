@@ -123,7 +123,7 @@ export default function Hero() {
       <div className="flex flex-col sm:flex-row items-center gap-4"
            style={{ pointerEvents: 'auto' }}>
         <Link
-          to="/signup"
+          to="/builder"
           className="btn-ocean px-8 py-4 text-base font-semibold
                      flex items-center gap-2 group cursor-pointer"
         >
